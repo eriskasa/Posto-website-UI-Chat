@@ -17,8 +17,7 @@ const HeroSection: React.FC = () => {
         Postoni dhe kerkoni, cdo nevoje qe deshironi!!
       </h2>
       <p
-      style={{ fontFamily: 'Quando, serif' }} 
-      className="text-[12px] lg:text-[16px] font-regular text-[#808080] mt-[24px]">Ekspolori, ruani dhe njoftohuni per te ghitha pronat e postuara online ne Shqiperei mew fuqi r post</p>
+      className="text-[14px] lg:text-[16px] font-regular text-[#808080] mt-[24px]">Ekspolori, ruani dhe njoftohuni per te ghitha pronat e postuara online ne Shqiperei mew fuqi r post</p>
     </section>
   );
 };

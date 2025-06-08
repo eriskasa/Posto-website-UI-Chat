@@ -1,5 +1,6 @@
 import React from "react";
 import HeroSection from "../components/ui/HeroSection";
+import SearchSection from "../components/ui/SearchSection";
 
 const Home: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const Home: React.FC = () => {
       {/* Main content */}
       <div className="relative z-10">
         <HeroSection />
+        <SearchSection />
       </div>
     </div>
   );
