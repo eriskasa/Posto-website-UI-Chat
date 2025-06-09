@@ -1,5 +1,7 @@
 import React, {useEffect} from 'react';
 import Button from './Button'; // Adjust the import path as necessary
+import Modal from './Modal';
+import ToggleButton from './ToggleButton';
 
 const SearchSection: React.FC = () => {
   const [searchTerm, setSearchTerm] = React.useState<string>('');
@@ -7,13 +9,17 @@ const SearchSection: React.FC = () => {
     const savedToggleState = localStorage.getItem('isToggles');
     return savedToggleState ? JSON.parse(savedToggleState) : false;
   });
-  
+  const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+  const [buttonToggles, setButtonToggles] = React.useState<{ [key: string]: boolean }>({});
 
   // Save the toggle state to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('isToggles', JSON.stringify(isToggles));
   }, [isToggles]);
   
+
+
+
   const handleSearch = () => {
     console.log("Searching for:", searchTerm)
     setSearchTerm('');
@@ -23,10 +29,25 @@ const SearchSection: React.FC = () => {
     setIsToggled((prev) => !prev);
   }
 
+  const handleAddButtonClick = () => {
+    setIsModalOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }
+
+  const handleButtonToggle = (buttonKey: string) => {
+    setButtonToggles((prev) => ({
+      ...prev,
+      [buttonKey]: !prev[buttonKey]
+    }));
+  };
+
   
   return (
     <section className="flex justify-center p-8">
-      <div className="relative border pt-[16px] pl-[24px] pr-[24px] pb-[8px] rounded-[12px] bg-[#3A3A3A] border-[#B388FF] w-[80vw] md:w-[80vw] lg:w-[962px]">
+      <div className="relative border pt-[16px] pl-[24px] pr-[24px] pb-[8px] rounded-[12px] bg-[#3A3A3A] border-[#B388FF] w-full md:w-[80vw] lg:w-[962px]">
       <input 
         type="text" 
         placeholder="Kerko" 
@@ -37,7 +58,7 @@ const SearchSection: React.FC = () => {
       <div className='relative flex items-center justify-between mt-[8px]'>
         <div className="flex items-center gap-[10px]">
           <Button 
-            onClick={() => console.log('add button clicked')}
+            onClick={handleAddButtonClick}
             variant='add'
             className="flex items-center"
             >
@@ -91,6 +112,62 @@ const SearchSection: React.FC = () => {
         </button>
         </div>
      </div>
+
+
+     <Modal isOpen={isModalOpen} onClose={handleCloseModal} >
+        <div className="flex flex-col gap-4 ">
+            <ToggleButton 
+              icon="../assets/gis_car.svg"
+              toggledIcon="../assets/gis_caron.svg"
+              label="Car"
+              isToggled={buttonToggles['car']}
+              onToggle={() => handleButtonToggle('car')}
+              />
+            <ToggleButton
+              icon="../assets/housedis.svg"
+              toggledIcon="../assets/houseen.svg"
+              label="House"
+              isToggled={buttonToggles['house']}
+              onToggle={() => handleButtonToggle('house')}
+              />
+            <ToggleButton
+              icon="../assets/mobof.svg"
+              toggledIcon="../assets/mobon.svg"
+              label="Mobile"
+              isToggled={buttonToggles['mobile']}
+              onToggle={() => handleButtonToggle('mobile')}
+              />
+            <ToggleButton
+              icon="../assets/workoff.svg"
+              toggledIcon="../assets/worken.svg"
+              label="Work"
+              isToggled={buttonToggles['work']}
+              onToggle={() => handleButtonToggle('work')}
+              />
+            <ToggleButton
+              icon="../assets/otheroff.svg"
+              toggledIcon="../assets/otheron.svg"
+              label="Other"
+              isToggled={buttonToggles['other']}
+              onToggle={() => handleButtonToggle('other')}
+              alternateIcon={`${!buttonToggles['other'] ? '../assets/Morebutton.svg' 
+                : '../assets/othersEnable.svg'}`}
+                />
+            <div className="border-t border-[#6A5989]"></div>
+          <div className="flex items-center justify-between">
+          <input 
+            type="text" 
+            placeholder="Search..." 
+            className="w-full pt-[8px] pl-[8px] pr-[8px] text-[#E3E3E]  border-none focus:outline-none focus:border-transparent"
+            />
+            <img 
+              src="../assets/searchdissable.svg" 
+              alt="search"
+              className="w-[24px] h-[24px] cursor-pointer peer-focus:hidden"
+              />
+            </div>
+        </div>
+      </Modal>
     </section>
   );
 };
