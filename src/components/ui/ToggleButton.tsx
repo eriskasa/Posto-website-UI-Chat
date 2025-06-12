@@ -20,6 +20,8 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ icon, toggledIcon, label, i
           src={isToggled ? toggledIcon : icon}
           alt={label}
           className="w-[24px] h-[24px]"
+          draggable={false}
+
           />
           <span 
             className={`text-center font-medium ${isToggled ? 'text-[#B388FF]' : 'text-[#808080]'}`}
@@ -32,6 +34,8 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({ icon, toggledIcon, label, i
               src={isToggled ? (alternateIcon || "../assets/addenable.svg") : (alternateIcon || "../assets/add.svg")} 
               alt="Toggle Icon" 
               className="right-0 w-[24px] h-[24px] focus:border-none focus:outline-none"
+              draggable={false}
+
             />
         </div>
     </button>
