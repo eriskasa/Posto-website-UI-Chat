@@ -31,4 +31,11 @@ html, body {
 }
 
 
+.scrollbar-transparent::-webkit-scrollbar {
+  width: 0px; /* Remove scrollbar width */
+  background: transparent; /* Make scrollbar background transparent */
+}
 
+.scrollbar-transparent {
+  scrollbar-width: none; /* For Firefox */
+}

@@ -9,7 +9,9 @@ const HeroSection: React.FC = () => {
       <img 
         src="/assets/Postologo.svg" 
         alt="Posto logo" 
-        className="w-[185px] h-[116px] mx-auto" />
+        className="w-[185px] h-[116px] mx-auto" 
+        draggable={false}
+        />
       <h2 
         style={{ fontFamily: 'Quando, serif' }} 
         className="text-[24px] lg:text-[32px] font-bold mt-[64px]"
