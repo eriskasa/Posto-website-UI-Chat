@@ -9,6 +9,8 @@ interface ToggleButtonProps {
   alternateIcon?: string; // Optional prop for an alternative icon
 }
 
+//modal toggle button component
+// This component renders a toggle button with an icon, label, and an optional alternate icon.  
 const ToggleButton: React.FC<ToggleButtonProps> = ({ icon, toggledIcon, label, isToggled, onToggle, alternateIcon }) => {
   return (
     <button

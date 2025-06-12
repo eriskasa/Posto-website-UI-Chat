@@ -10,11 +10,29 @@ const SearchSection: React.FC = () => {
     return savedToggleState ? JSON.parse(savedToggleState) : false;
   });
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
-  const [buttonToggles, setButtonToggles] = React.useState<{ [key: string]: boolean }>({});
   const [modalSearchTerm, setModalSearchTerm] = React.useState<string>('');
+  const [buttonToggles, setButtonToggles] = React.useState<{ [key: string]: boolean }>({});
   const [ selectedButtons, setSelectedButtons ] = React.useState<
   { key: string, label: string, toggledIcon: string }[]>([]);
 
+  useEffect(() => {
+    localStorage.setItem('isToggles', JSON.stringify(isToggles));
+  }, [isToggles]);
+  
+  // Load the toggle state from localStorage when the component mounts
+  useEffect(() => {
+  const savedButtonToggles = localStorage.getItem('buttonToggles');
+  const savedSelectedButtons = localStorage.getItem('selectedButtons');
+
+  if (savedButtonToggles) {
+    setButtonToggles(JSON.parse(savedButtonToggles));
+  }
+  if (savedSelectedButtons) {
+    setSelectedButtons(JSON.parse(savedSelectedButtons));
+  }
+}, []);
+
+    // Save the toggle state to localStorage whenever it changes
   const buttonList = [
   { key: 'car', label: 'Car', icon: '../assets/gis_car.svg', toggledIcon: '../assets/gis_caron.svg' },
   { key: 'house', label: 'House', icon: '../assets/housedis.svg', toggledIcon: '../assets/houseen.svg' },
@@ -26,11 +44,6 @@ const SearchSection: React.FC = () => {
 const filteredModalButtons = buttonList.filter((button) =>
   button.label.toLowerCase().includes(modalSearchTerm.toLowerCase())
 );
-  // Save the toggle state to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('isToggles', JSON.stringify(isToggles));
-  }, [isToggles]);
-  
 
 
   const handleSearch = () => {
@@ -50,25 +63,30 @@ const filteredModalButtons = buttonList.filter((button) =>
     setIsModalOpen(false);
   }
 
-  const handleButtonToggle = (buttonKey: string) => {
-    setButtonToggles((prev) => ({
+  // handle button toggle and update selected buttons
+const handleButtonToggle = (buttonKey: string) => {
+  setButtonToggles((prev) => {
+    const updatedToggles = {
       ...prev,
-      [buttonKey]: !prev[buttonKey]
-    }));
+      [buttonKey]: !prev[buttonKey],
+    };
+    localStorage.setItem('buttonToggles', JSON.stringify(updatedToggles));
+    return updatedToggles;
+  });
 
     const button = buttonList.find((btn) => btn.key === buttonKey);
     if (!button) return;
+    
+  // handle selectedmodalbuttons and update localStorage
+  setSelectedButtons((prev) => {
+    const updatedButtons = prev.some((btn) => btn.key === buttonKey)
+      ? prev.filter((btn) => btn.key !== buttonKey)
+      : [...prev, { key: button.key, label: button.label, toggledIcon: button.toggledIcon }];
+    localStorage.setItem('selectedButtons', JSON.stringify(updatedButtons));
+    return updatedButtons;
+  });
+};
 
-    setSelectedButtons((prev) => {
-      if (prev.some((btn) => btn.key === buttonKey)) {
-        return prev.filter((btn) => btn.key !== buttonKey);
-      } else {
-        return [...prev, { key: button.key, label: button.label, toggledIcon: button.toggledIcon}];
-      };
-    })
-  };
-
-  
   return (
     <section className="flex justify-center p-8 select-none">
         {/* search div */}
