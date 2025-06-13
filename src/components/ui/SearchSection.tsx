@@ -3,7 +3,11 @@ import Button from './Button'; // Adjust the import path as necessary
 import Modal from './Modal';
 import ToggleButton from './ToggleButton';
 
-const SearchSection: React.FC = () => {
+interface SearchSectionProps {
+  onSearch: (searchTerm: string) => void;
+}
+
+const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [isToggles, setIsToggled] = React.useState<boolean>(() => {
     const savedToggleState = localStorage.getItem('isToggles');
@@ -47,6 +51,12 @@ const filteredModalButtons = buttonList.filter((button) =>
 
 
   const handleSearch = () => {
+    if (!searchTerm.trim()) {
+      console.log("Search term is empty");
+      return;
+    } else {
+      onSearch(searchTerm);
+    }
     console.log("Searching for:", searchTerm)
     setSearchTerm('');
   };
@@ -97,6 +107,10 @@ const handleButtonToggle = (buttonKey: string) => {
         value={searchTerm} 
         className="w-full pt-[10px] pl-[8px] pr-[8px] pb-[10px] text-[#E3E3E] bg-transparent border-none focus:outline-none focus:border-transparent"
         onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSearch();
+          }}}
       />
         {/* div for search bottom toggle icons */}
       <div className='relative flex flex-s justify-between mt-[10px]'>
