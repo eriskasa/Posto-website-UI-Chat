@@ -5,6 +5,8 @@ import SearchResultDisplay from "../components/ui/SearchResultDisplay";
 
 const Home: React.FC = () => {
   const [searchResult, setSearchResult] = React.useState<string>("");
+  const [aiResponse, setAiResponse] = React.useState<string>("");
+
   return (
     <div className="relative min-h-screen bg-[#232323] overflow-hidden select-none"> 
       {/* Top-right blur ellipse */}
@@ -30,12 +32,13 @@ const Home: React.FC = () => {
         {searchResult ? (
         <SearchResultDisplay
           searchResult={searchResult}
+          aiResponse={aiResponse}
           clearSearch={() => setSearchResult("")}
         />
       ) : (
         <HeroSection />
       )}
-        <SearchSection  onSearch={(term) => setSearchResult(term)}/>
+        <SearchSection  onSearch={(term) => setSearchResult(term)} onAiResponse={(response) => setAiResponse(response) }/>
       </div>
     </div>
   );

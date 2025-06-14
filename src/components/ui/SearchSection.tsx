@@ -2,12 +2,14 @@ import React, {useEffect} from 'react';
 import Button from './Button'; // Adjust the import path as necessary
 import Modal from './Modal';
 import ToggleButton from './ToggleButton';
+import { fetchAIResponse } from '../../utils/aiApi';
 
 interface SearchSectionProps {
   onSearch: (searchTerm: string) => void;
+  onAiResponse: (response: string) => void;
 }
 
-const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
+const SearchSection: React.FC<SearchSectionProps> = ({ onSearch, onAiResponse }) => {
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [isToggles, setIsToggled] = React.useState<boolean>(() => {
     const savedToggleState = localStorage.getItem('isToggles');
@@ -18,6 +20,7 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch }) => {
   const [buttonToggles, setButtonToggles] = React.useState<{ [key: string]: boolean }>({});
   const [ selectedButtons, setSelectedButtons ] = React.useState<
   { key: string, label: string, toggledIcon: string }[]>([]);
+  const [ aiResponse, setAiResponse ] = React.useState<string>('');
 
   useEffect(() => {
     localStorage.setItem('isToggles', JSON.stringify(isToggles));
@@ -49,17 +52,25 @@ const filteredModalButtons = buttonList.filter((button) =>
   button.label.toLowerCase().includes(modalSearchTerm.toLowerCase())
 );
 
-
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!searchTerm.trim()) {
       console.log("Search term is empty");
       return;
     } else {
       onSearch(searchTerm);
-    }
+      onAiResponse(aiResponse);
     console.log("Searching for:", searchTerm)
     setSearchTerm('');
-  };
+  }};
+
+const fetchAndSetAIResponse = async (query: string) => {
+  try {
+    const result = await fetchAIResponse(query); // Call the API
+    setAiResponse(result); // Update the state with the AI response
+  } catch (error) {
+    console.error("Error fetching AI response:", error);
+  }
+};
 
   const handleToggle = () => {
     setIsToggled((prev) => !prev);
@@ -110,6 +121,7 @@ const handleButtonToggle = (buttonKey: string) => {
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             handleSearch();
+            fetchAndSetAIResponse(searchTerm);
           }}}
       />
         {/* div for search bottom toggle icons */}
@@ -186,7 +198,12 @@ const handleButtonToggle = (buttonKey: string) => {
           <button 
             type='button'
             title='enterbutton'
-            onClick={handleSearch}
+            onClick={() => {
+              if (searchTerm.trim()) {
+                handleSearch();
+                fetchAndSetAIResponse(searchTerm);
+              }
+            }}
             className="flex-shrink-0 select-none ml-auto"
             >
               <img src={searchTerm ? "../assets/enterbutton_enable.svg" : "../assets/enterbutton_disable.svg"}
