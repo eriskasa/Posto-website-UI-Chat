@@ -20,8 +20,9 @@ const SearchSection: React.FC<SearchSectionProps> = ({ onSearch, onAiResponse })
   const [buttonToggles, setButtonToggles] = React.useState<{ [key: string]: boolean }>({});
   const [ selectedButtons, setSelectedButtons ] = React.useState<
   { key: string, label: string, toggledIcon: string }[]>([]);
-  const [ aiResponse, setAiResponse ] = React.useState<string>('');
 
+
+  
   useEffect(() => {
     localStorage.setItem('isToggles', JSON.stringify(isToggles));
   }, [isToggles]);
@@ -58,20 +59,19 @@ const filteredModalButtons = buttonList.filter((button) =>
       return;
     } else {
       onSearch(searchTerm);
-      onAiResponse(aiResponse);
-    console.log("Searching for:", searchTerm)
+      console.log("Searching for:", searchTerm)
     setSearchTerm('');
   }};
 
 const fetchAndSetAIResponse = async (query: string) => {
   try {
     const result = await fetchAIResponse(query); // Call the API
-    setAiResponse(result); // Update the state with the AI response
+    onAiResponse(result); // Pass the response to the parent component
+    console.log("AI Response received:", result);
   } catch (error) {
     console.error("Error fetching AI response:", error);
   }
 };
-
   const handleToggle = () => {
     setIsToggled((prev) => !prev);
   }
@@ -121,7 +121,8 @@ const handleButtonToggle = (buttonKey: string) => {
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             handleSearch();
-            fetchAndSetAIResponse(searchTerm);
+            fetchAndSetAIResponse(searchTerm); // Fetch AI response
+            
           }}}
       />
         {/* div for search bottom toggle icons */}
@@ -201,7 +202,8 @@ const handleButtonToggle = (buttonKey: string) => {
             onClick={() => {
               if (searchTerm.trim()) {
                 handleSearch();
-                fetchAndSetAIResponse(searchTerm);
+                fetchAndSetAIResponse(searchTerm); // Fetch AI response
+
               }
             }}
             className="flex-shrink-0 select-none ml-auto"

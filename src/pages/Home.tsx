@@ -6,6 +6,7 @@ import SearchResultDisplay from "../components/ui/SearchResultDisplay";
 const Home: React.FC = () => {
   const [searchResult, setSearchResult] = React.useState<string>("");
   const [aiResponse, setAiResponse] = React.useState<string>("");
+  console.log("Rendering Home component aiResponse:", aiResponse);
 
   return (
     <div className="relative min-h-screen bg-[#232323] overflow-hidden select-none"> 
@@ -33,12 +34,16 @@ const Home: React.FC = () => {
         <SearchResultDisplay
           searchResult={searchResult}
           aiResponse={aiResponse}
-          clearSearch={() => setSearchResult("")}
+          clearSearch={() => {
+            setSearchResult("")
+            setAiResponse("");
+          }
+          }
         />
       ) : (
         <HeroSection />
       )}
-        <SearchSection  onSearch={(term) => setSearchResult(term)} onAiResponse={(response) => setAiResponse(response) }/>
+        <SearchSection  onSearch={(term) => setSearchResult(term)} onAiResponse={(response) => setAiResponse(response)}/>
       </div>
     </div>
   );
