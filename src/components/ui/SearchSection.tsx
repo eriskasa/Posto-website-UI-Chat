@@ -7,9 +7,10 @@ import { fetchAIResponse } from '../../utils/aiApi';
 interface SearchSectionProps {
   onSearch: (searchTerm: string) => void;
   onAiResponse: (response: string) => void;
+  onChatUpdate: (input: string, response: string) => void;
 }
 
-const SearchSection: React.FC<SearchSectionProps> = ({ onSearch, onAiResponse }) => {
+const SearchSection: React.FC<SearchSectionProps> = ({ onSearch, onAiResponse, onChatUpdate }) => {
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [isToggles, setIsToggled] = React.useState<boolean>(() => {
     const savedToggleState = localStorage.getItem('isToggles');
@@ -67,6 +68,7 @@ const fetchAndSetAIResponse = async (query: string) => {
   try {
     const result = await fetchAIResponse(query); // Call the API
     onAiResponse(result); // Pass the response to the parent component
+    onChatUpdate(query, result); // Update chat history
     console.log("AI Response received:", result);
   } catch (error) {
     console.error("Error fetching AI response:", error);
@@ -109,7 +111,7 @@ const handleButtonToggle = (buttonKey: string) => {
 };
 
   return (
-    <section className="flex justify-center p-8 select-none">
+    <section className="flex justify-center p-8 select-none ">
         {/* search div */}
       <div className="relative items-center justify-between border pt-[16px] pl-[24px] pr-[24px] pb-[8px] rounded-[12px] bg-[#3A3A3A] border-[#B388FF] w-full md:w-[80vw] lg:w-[962px]">
       <input 
