@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import HeroSection from "../components/ui/HeroSection";
 import SearchSection from "../components/ui/SearchSection";
 import SearchResultDisplay from "../components/ui/SearchResultDisplay";

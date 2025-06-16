@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const GEMINI_API_KEY = "AIzaSyCz_5kZlMTrN22YO2flYiSOBMYLRwSEC-E";
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const API_BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 
