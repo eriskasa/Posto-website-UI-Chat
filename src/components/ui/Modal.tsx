@@ -27,7 +27,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   
   return (
     <div
-    className="absolute top-110  lg:top-30 xl:top-30 sm:top-30 right-0 sm:right-40  md:right- lg:right-126 xl:right-126 inset-0 flex items-center justify-center select-none"
+    className="absolute top-85  lg:top-24 xl:top-30 sm:top-30 right-0 sm:right-40 md:right- lg:right-126 xl:right-126 inset-0 flex items-center justify-center select-none "
     >
       <div
         className="bg-[#3A3A3A] rounded-lg shadow-lg w-[413px] p-4 border-[1px] border-[#B388FF] w-full sm:w-[413px] lg:w-[413px] xl:w-[413px] max-h-[80vh] overflow-y-auto"

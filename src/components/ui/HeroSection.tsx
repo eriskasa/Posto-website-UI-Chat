@@ -2,7 +2,7 @@ import React from 'react';
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="flex flex-col items-center text-center p-8 pt-[219px] lg:pt-[173px]">
+    <section className="flex flex-col items-center text-center p-8  pt-[150px] lg:pt-[173px]">
       <h1 style={{ fontFamily: 'Quando, serif' }} className="text-[32px] md:text-[40px] lg:text-[48px] font-normal mb-[32px]">
         POSTO
       </h1>

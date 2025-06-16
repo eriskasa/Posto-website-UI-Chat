@@ -111,7 +111,7 @@ const handleButtonToggle = (buttonKey: string) => {
 };
 
   return (
-    <section className="flex justify-center p-8 select-none ">
+    <section className="flex justify-center p-8 select-none">
         {/* search div */}
       <div className="relative items-center justify-between border pt-[16px] pl-[24px] pr-[24px] pb-[8px] rounded-[12px] bg-[#3A3A3A] border-[#B388FF] w-full md:w-[80vw] lg:w-[962px]">
       <input 

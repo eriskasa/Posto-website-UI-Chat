@@ -17,7 +17,7 @@ const SearchResultDisplay: React.FC<SearchResultDisplayProps> = ({ clearSearch, 
 
   return (
     <div className="flex justify-center items-center flex-grow w-full h-full">
-      <div className="flex flex-col border p-2 rounded-[12px] bg-[#3A3A3A] border-[#262626] w-[85vw] md:w-[80vw] lg:w-[962px] mt-[60px] h-[600px] ">
+      <div className="flex flex-col border p-2 rounded-[12px] bg-[#3A3A3A] border-[#262626] w-[85vw] md:w-[80vw] lg:w-[962px] mt-[32px] h-[600px] ">
         <div className="flex justify-end pb-[8px] border-b border-[#444444]">
           <button
             type="button"
