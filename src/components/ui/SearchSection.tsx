@@ -2,8 +2,15 @@ import React, {useEffect} from 'react';
 import Button from './Button'; // Adjust the import path as necessary
 import Modal from './Modal';
 import ToggleButton from './ToggleButton';
+import { fetchAIResponse } from '../../utils/aiApi';
 
-const SearchSection: React.FC = () => {
+interface SearchSectionProps {
+  onSearch: (searchTerm: string) => void;
+  onAiResponse: (response: string) => void;
+  onChatUpdate: (input: string, response: string) => void;
+}
+
+const SearchSection: React.FC<SearchSectionProps> = ({ onSearch, onAiResponse, onChatUpdate }) => {
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [isToggles, setIsToggled] = React.useState<boolean>(() => {
     const savedToggleState = localStorage.getItem('isToggles');
@@ -15,6 +22,8 @@ const SearchSection: React.FC = () => {
   const [ selectedButtons, setSelectedButtons ] = React.useState<
   { key: string, label: string, toggledIcon: string }[]>([]);
 
+
+  
   useEffect(() => {
     localStorage.setItem('isToggles', JSON.stringify(isToggles));
   }, [isToggles]);
@@ -45,12 +54,26 @@ const filteredModalButtons = buttonList.filter((button) =>
   button.label.toLowerCase().includes(modalSearchTerm.toLowerCase())
 );
 
-
-  const handleSearch = () => {
-    console.log("Searching for:", searchTerm)
+  const handleSearch = async () => {
+    if (!searchTerm.trim()) {
+      console.log("Search term is empty");
+      return;
+    } else {
+      onSearch(searchTerm);
+      console.log("Searching for:", searchTerm)
     setSearchTerm('');
-  };
+  }};
 
+const fetchAndSetAIResponse = async (query: string) => {
+  try {
+    const result = await fetchAIResponse(query); // Call the API
+    onAiResponse(result); // Pass the response to the parent component
+    onChatUpdate(query, result); // Update chat history
+    console.log("AI Response received:", result);
+  } catch (error) {
+    console.error("Error fetching AI response:", error);
+  }
+};
   const handleToggle = () => {
     setIsToggled((prev) => !prev);
   }
@@ -88,7 +111,7 @@ const handleButtonToggle = (buttonKey: string) => {
 };
 
   return (
-    <section className="flex justify-center p-8 select-none">
+    <section className="flex justify-center p-8 select-none ">
         {/* search div */}
       <div className="relative items-center justify-between border pt-[16px] pl-[24px] pr-[24px] pb-[8px] rounded-[12px] bg-[#3A3A3A] border-[#B388FF] w-full md:w-[80vw] lg:w-[962px]">
       <input 
@@ -97,6 +120,12 @@ const handleButtonToggle = (buttonKey: string) => {
         value={searchTerm} 
         className="w-full pt-[10px] pl-[8px] pr-[8px] pb-[10px] text-[#E3E3E] bg-transparent border-none focus:outline-none focus:border-transparent"
         onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSearch();
+            fetchAndSetAIResponse(searchTerm); // Fetch AI response
+            
+          }}}
       />
         {/* div for search bottom toggle icons */}
       <div className='relative flex flex-s justify-between mt-[10px]'>
@@ -172,7 +201,13 @@ const handleButtonToggle = (buttonKey: string) => {
           <button 
             type='button'
             title='enterbutton'
-            onClick={handleSearch}
+            onClick={() => {
+              if (searchTerm.trim()) {
+                handleSearch();
+                fetchAndSetAIResponse(searchTerm); // Fetch AI response
+
+              }
+            }}
             className="flex-shrink-0 select-none ml-auto"
             >
               <img src={searchTerm ? "../assets/enterbutton_enable.svg" : "../assets/enterbutton_disable.svg"}
